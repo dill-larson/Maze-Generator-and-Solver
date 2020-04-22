@@ -7,7 +7,7 @@ public class Maze {
     public Maze(int size) {
         maze = new Graph<>();
         this.size = size;
-        int spacing = (int)Math.floor(size/2);
+        int spacing = (size > 3) ? (int)Math.floor(size/2.0) : size % 2;
         int idk = size - 1;
 
         for(int i = 0; i < size*size; ++i) { //rows
