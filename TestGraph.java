@@ -7,6 +7,6 @@ public class TestGraph extends TestCase {
         Maze maze = new Maze(2);
 
         // print the graph
-        System.out.println("Maze:\n" + maze.printMaze());
+        System.out.println("Maze.Maze:\n" + maze.printMaze());
     }
 }

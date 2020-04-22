@@ -70,7 +70,7 @@ DFS:
 ======================
 
 
-Enter Size of Maze: 6
+Enter Size of Maze.Maze: 6
 
 Graph Size: 6
 MAZE:
