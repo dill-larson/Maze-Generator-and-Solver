@@ -83,15 +83,4 @@ public class Graph<T> {
 
         return result;
     }
-
-    public String printMaze() {
-        int size = 4;
-        String result = "";
-        for(T vertex : adjacencyList.keySet()) {
-            result += '+';
-        }
-
-
-        return result;
-    }
 }
