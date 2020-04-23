@@ -14,11 +14,13 @@ public class Maze {
         maze = new Graph<Cell>();
         this.size = size;
         Random rg = new Random();
+        int index = 0;
 
         // create cells in space
         for (int i = 0; i<size; i++){
             for (int j = 0; j< size; j++){
                 cellSpace[i][j]= new Cell();
+                cellSpace[i][j].setIndex(index++);
                 maze.addVertex(cellSpace[i][j]);
             }
         }
@@ -28,50 +30,80 @@ public class Maze {
         int currentRow = 0;
         int currentColumn = 0;
         Cell currentCell = cellSpace[currentRow][currentColumn];
-
+        currentCell.setNorthWall(false);
+        //cellSpace[size-1][size-1].setSouthWall(false);
         int visitedCells = 1;
-        int index = -1;
+
         ArrayList<Cell> neighbors = new ArrayList<Cell>();
-        while (visitedCells< totalCells){
+        Cell endCell = cellSpace[size-1][size-1];
+        while (visitedCells< totalCells ){
             //find neighbors with intact walls
-            if (currentColumn != size-1 & cellSpace[currentRow][currentColumn++].wallsIntact()){
-                cellSpace[currentRow][currentColumn++].edgeWall = "east";
-                neighbors.add(cellSpace[currentRow][currentColumn++]);
+
+            neighbors.clear();
+            if (currentColumn != size-1 ){
+                if (cellSpace[currentRow][currentColumn+1].wallsIntact()){
+                    cellSpace[currentRow][currentColumn+1].edgeWall = "east";
+                    neighbors.add(cellSpace[currentRow][currentColumn+1]);
+                }
             }
-            if (currentColumn != 0 && cellSpace[currentRow][currentColumn--].wallsIntact()){
-                cellSpace[currentRow][currentColumn--].edgeWall = "west";
-                neighbors.add(cellSpace[currentRow][currentColumn--]);
+            if (currentColumn != 0 ){
+                if (cellSpace[currentRow][currentColumn-1].wallsIntact()){
+                    cellSpace[currentRow][currentColumn-1].edgeWall = "west";
+                    neighbors.add(cellSpace[currentRow][currentColumn-1]);
+                }
             }
-            if (currentRow != size-1 & cellSpace[currentRow++][currentColumn].wallsIntact()){
-                cellSpace[currentRow++][currentColumn].edgeWall = "south";
-                neighbors.add(cellSpace[currentRow++][currentColumn]);
+            if (currentRow != size-1 ){
+                if (cellSpace[currentRow+1][currentColumn].wallsIntact()){
+                    cellSpace[currentRow+1][currentColumn].edgeWall = "south";
+                    neighbors.add(cellSpace[currentRow+1][currentColumn]);
+                }
+
             }
-            if (currentRow != 0 && cellSpace[currentRow--][currentColumn].wallsIntact()){
-                cellSpace[currentRow][currentColumn--].edgeWall = "north";
-                neighbors.add(cellSpace[currentRow--][currentColumn]);
+            if (currentRow != 0 ){
+                if (cellSpace[currentRow-1][currentColumn].wallsIntact()){
+                    cellSpace[currentRow-1][currentColumn].edgeWall = "north";
+                    neighbors.add(cellSpace[currentRow-1][currentColumn]);
+                }
+
             }
             // if one or more found, choose one at random
             Cell neighbor;
-            if(size>1){
+            if(!currentCell.equals(endCell) && neighbors.size()>=1  ){
                 neighbor = chooseRandomRoom(neighbors);
                 // knock down wall between neighbor and currentCell
                 if (neighbor.edgeWall.equals("east")){
-                    neighbor.setEastWall(false);
-                    maze.addEdge(currentCell,neighbor,true);
-                }else if (neighbor.edgeWall.equals("west")){
                     neighbor.setWestWall(false);
+                    currentCell.setEastWall(false);
+
                     maze.addEdge(currentCell,neighbor,true);
+                    currentColumn++;
+                }else if (neighbor.edgeWall.equals("west")){
+                    neighbor.setEastWall(false);
+                    currentCell.setWestWall(false);
+
+                    maze.addEdge(currentCell,neighbor,true);
+                    currentColumn--;
                 }else if (neighbor.edgeWall.equals("north")){
-                    neighbor.setNorthWall(false);
+                    neighbor.setSouthWall(false);
+                    currentCell.setNorthWall(false);
+
                     maze.addEdge(currentCell,neighbor,true);
+                    currentRow--;
                 }
                 else {
-                    neighbor.setSouthWall(false);
+                    neighbor.setNorthWall(false);
+                    currentCell.setSouthWall(false);
+
                     maze.addEdge(currentCell,neighbor,true);
+                    currentRow++;
                 }
+                cellStack.push(currentCell);
+                currentCell = neighbor;
+                visitedCells++;
 
             }else {
-                neighbor = neighbors.get(0);
+                if (!cellStack.isEmpty())
+                    currentCell = cellStack.pop();
             }
 
 
@@ -105,8 +137,20 @@ public class Maze {
 
     public String printMaze() {
         String result = maze.toString();
+        for (int i = 0; i< size; i++){
+            for (int j=0; j< size; j++){
+                if (cellSpace[i][j].getSouthWall()){
+                    System.out.print("_");
+                }
+                System.out.print(cellSpace[i][j].index);
+                if (cellSpace[i][j].getEastWall()){
+                    System.out.print("|");
+                }
 
 
+            }
+            System.out.println("\n");
+        }
         return result;
     }
 }

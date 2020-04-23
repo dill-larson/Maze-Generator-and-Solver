@@ -7,6 +7,15 @@ public class Cell {
     private boolean southWall;
     private boolean eastWall;
     private boolean westWall;
+
+    public String toString() {
+        return String.valueOf(index);
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
     public int index;
     public String edgeWall;
     public Cell(){
@@ -14,6 +23,7 @@ public class Cell {
         southWall= true;
         eastWall= true;
         westWall= true;
+
     }
 
     public boolean getNorthWall() {
