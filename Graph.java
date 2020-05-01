@@ -69,8 +69,7 @@ public class Graph<T> {
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         String result = "";
 
         for (T vertex : adjacencyList.keySet()) {

@@ -1,60 +1,71 @@
 package cs146s20.larson.project03;
 
-public class Cell {
-    //Boolean values to represent walls--true = wall; false = no wall
-    private boolean north, south, east, west;
-    private int id = 0;
+import java.util.ArrayList;
+import java.util.Random;
 
-    public Cell(int id) {
-        north = true;
-        south = true;
-        east = true;
-        west = true;
-        this.id = id;
+public class Cell {
+    private boolean northWall, southWall, eastWall, westWall;
+    private int x, y;
+
+    public Cell(int x, int y){
+        northWall = true;
+        southWall= true;
+        eastWall= true;
+        westWall= true;
+        this.x = x;
+        this.y = y;
     }
 
     //Getters
-    public boolean getNorth() {
-        return north;
+    public boolean getNorthWall() {
+        return northWall;
     }
-    public boolean getSouth() {
-        return south;
+    public boolean getSouthWall() {
+        return southWall;
     }
-    public boolean getEast() {
-        return east;
+    public boolean getEastWall() {
+        return eastWall;
     }
-    public boolean getWest() {
-        return west;
+    public boolean getWestWall() {
+        return westWall;
     }
-    public int getId() {
-        return id;
+    public int getX() {
+        return x;
+    }
+    public int getY() {
+        return y;
     }
 
     //Setters
-    public void setNorth(boolean wall) {
-        north = wall;
+    public void setNorthWall(boolean northWall) {
+        this.northWall = northWall;
     }
-    public void setSouth(boolean wall) {
-        south = wall;
+    public void setSouthWall(boolean southWall) {
+        this.southWall = southWall;
     }
-    public void setEast(boolean wall) {
-        east = wall;
+    public void setEastWall(boolean eastWall) {
+        this.eastWall = eastWall;
     }
-    public void setWest(boolean wall) {
-        west = wall;
+    public void setWestWall(boolean westWall) {
+        this.westWall = westWall;
     }
 
+
     //Methods
+    public boolean isIntact() {
+        return northWall && southWall && eastWall && westWall;
+    }
     @Override
     public String toString() {
-        return "cell-" + id;
+        return "(" + x + ", " + y + ")";
     }
     @Override
     public int hashCode() {
-        return id;
+        return this.toString().hashCode();
     }
     @Override
     public boolean equals(Object o) {
-        return ((Cell)o).getId() == this.getId();
+        Cell otherCell = (Cell) o;
+        return otherCell != null && otherCell.getX() == this.getX() && otherCell.getY() == this.getY();
     }
 }
