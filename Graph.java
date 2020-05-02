@@ -1,4 +1,3 @@
-package cs146s20.larson.project03;
 
 import java.util.*;
 
@@ -81,5 +80,8 @@ public class Graph<T> {
         }
 
         return result;
+    }
+    public List<T> getEdges( T vertex){
+        return adjacencyList.get(vertex);
     }
 }

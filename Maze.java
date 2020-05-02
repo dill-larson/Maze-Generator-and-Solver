@@ -1,4 +1,3 @@
-package cs146s20.larson.project03;
 
 import javafx.util.Pair;
 
@@ -192,5 +191,14 @@ public class Maze extends Graph<Cell> {
                 this.addEdge(currentCell, neighbor, true);
                 break;
         }
+    }
+    public Cell getEntryPoint(){
+        return grid[0][0];
+    }
+    public Cell getExitPoint(){
+        return grid[size-1][size-1];
+    }
+    public Cell[][] getGrid(){
+        return grid;
     }
 }

@@ -1,10 +1,10 @@
-package cs146s20.larson.project03;
+
 
 import java.util.ArrayList;
 import java.util.Random;
 
 public class Cell {
-    private boolean northWall, southWall, eastWall, westWall;
+    private boolean northWall, southWall, eastWall, westWall, visited;
     private int x, y;
 
     public Cell(int x, int y){
@@ -14,6 +14,7 @@ public class Cell {
         westWall= true;
         this.x = x;
         this.y = y;
+        visited = false;
     }
 
     //Getters
@@ -35,6 +36,9 @@ public class Cell {
     public int getY() {
         return y;
     }
+    public boolean visited() {
+        return visited;
+    }
 
     //Setters
     public void setNorthWall(boolean northWall) {
@@ -49,6 +53,7 @@ public class Cell {
     public void setWestWall(boolean westWall) {
         this.westWall = westWall;
     }
+    public void markAsVisited() { visited = true;}
 
 
     //Methods
