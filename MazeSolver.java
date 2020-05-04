@@ -16,15 +16,16 @@ public class MazeSolver {
         cellStack.push(start);
         start.markAsVisited();
 
-        while (!cellStack.isEmpty()){
+        while (!cellStack.isEmpty() ){
             currentCell = cellStack.pop();
+            if(currentCell== end)break;
             path.add(new Pair(currentCell.getX(),currentCell.getY() ));
             for (Cell neighbor: maze.getEdges(currentCell)){
-                if(neighbor== end)break;
                 if(!neighbor.visited()){
                     cellStack.push(neighbor);
                     neighbor.markAsVisited();
                 }
+                if(neighbor== end)break;
             }
         }
         path.add(new Pair(end.getY(),end.getX() ));
@@ -32,7 +33,6 @@ public class MazeSolver {
     public void printDFS(){
         Cell[][] grid = maze.getGrid();
         int size = grid.length;
-        char index = 48;
         char[][] charMaze = new char[size*2+1][size*2+1];
 
         int offSetX = 1;
@@ -53,28 +53,39 @@ public class MazeSolver {
             }
             offSetY++;
         }
-
+        int ndx = 0;
+        for (Pair p: path){
+            int x = (int) p.getKey();
+            int y = (int) p.getValue();
+            grid[y][x].setFoundNdex(ndx++);
+            //System.out.println("(" + x + "," + y + ")");
+            //System.out.println(grid[x][y].getFoundNdex());
+        }
 
         String result = "";
+
+        offSetY = 0;
         for(int row = 0; row < charMaze.length; ++row) {
+            offSetX = 0;
             for(int col = 0; col < charMaze.length; ++col) {
                 if(row % 2 == 0 && col % 2 == 0) {
                     charMaze[row][col] = '+';
                 }
                 else if(row % 2 != 0 && col % 2 != 0) {
-                    charMaze[row][col] = ' ';
+                    if(grid[offSetY][offSetX].getFoundNdex()>=0){
+                        charMaze[row][col] = (char) (grid[offSetY][offSetX].getFoundNdex() + 48) ;
+
+                    }else {
+                        charMaze[row][col] = ' ';
+                    }
+                    offSetX++;
                 }
+
                 result += charMaze[row][col];
             }
+            if(row % 2 != 0) { offSetY++;}
             result += "\n";
         }
-        for (Pair p: path) {
-            int x = (int) p.getKey();
-            int y = (int) p.getValue();
-            System.out.println("(" + x + "," + y +")");
-            charMaze[x][y] = index++;
-        }
-
         System.out.println(result);
     }
 }

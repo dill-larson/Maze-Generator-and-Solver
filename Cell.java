@@ -5,7 +5,7 @@ import java.util.Random;
 
 public class Cell {
     private boolean northWall, southWall, eastWall, westWall, visited;
-    private int x, y;
+    private int x, y, foundNdex;
 
     public Cell(int x, int y){
         northWall = true;
@@ -15,6 +15,7 @@ public class Cell {
         this.x = x;
         this.y = y;
         visited = false;
+        foundNdex = -1;
     }
 
     //Getters
@@ -39,6 +40,9 @@ public class Cell {
     public boolean visited() {
         return visited;
     }
+    public int getFoundNdex(){
+        return foundNdex;
+    }
 
     //Setters
     public void setNorthWall(boolean northWall) {
@@ -54,6 +58,7 @@ public class Cell {
         this.westWall = westWall;
     }
     public void markAsVisited() { visited = true;}
+    public void setFoundNdex(int n){foundNdex = n%10;}
 
 
     //Methods

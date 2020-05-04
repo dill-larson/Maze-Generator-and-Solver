@@ -11,7 +11,7 @@ public class Maze extends Graph<Cell> {
     private Pair<Integer, Integer> existPoint;
     private int size;
     private Cell[][] grid;
-    private Random rng = new Random(System.currentTimeMillis());
+    private Random rng = new Random(3);
 
     public Maze(int size) {
         this.size = size;
