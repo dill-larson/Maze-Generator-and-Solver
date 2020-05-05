@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Cell {
-    private boolean northWall, southWall, eastWall, westWall, visited;
-    private int x, y, foundNdex;
+    private boolean northWall, southWall, eastWall, westWall;
+    private int x, y;
 
     public Cell(int x, int y){
         northWall = true;
@@ -14,8 +14,7 @@ public class Cell {
         westWall= true;
         this.x = x;
         this.y = y;
-        visited = false;
-        foundNdex = -1;
+
     }
 
     //Getters
@@ -37,12 +36,8 @@ public class Cell {
     public int getY() {
         return y;
     }
-    public boolean visited() {
-        return visited;
-    }
-    public int getFoundNdex(){
-        return foundNdex;
-    }
+
+
 
     //Setters
     public void setNorthWall(boolean northWall) {
@@ -57,8 +52,6 @@ public class Cell {
     public void setWestWall(boolean westWall) {
         this.westWall = westWall;
     }
-    public void markAsVisited() { visited = true;}
-    public void setFoundNdex(int n){foundNdex = n%10;}
 
 
     //Methods

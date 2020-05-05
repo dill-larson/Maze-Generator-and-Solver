@@ -1,10 +1,7 @@
 
 import javafx.util.Pair;
 
-import java.util.ArrayList;
-import java.util.EmptyStackException;
-import java.util.Random;
-import java.util.Stack;
+import java.util.*;
 
 public class Maze extends Graph<Cell> {
     private Pair<Integer, Integer> entryPoint;
@@ -192,13 +189,116 @@ public class Maze extends Graph<Cell> {
                 break;
         }
     }
-    public Cell getEntryPoint(){
+    private Cell getEntryPoint(){
         return grid[0][0];
     }
-    public Cell getExitPoint(){
+    private Cell getExitPoint(){
         return grid[size-1][size-1];
     }
-    public Cell[][] getGrid(){
-        return grid;
+    public void DFS(Maze maze) {
+        ArrayList<Cell> path = new ArrayList<Cell>();
+        ArrayList<Cell> shortestPath = new ArrayList<Cell>();
+        ArrayList<Cell> visited = new ArrayList<Cell>();
+        HashMap<Cell,Cell> predecessors = new HashMap<Cell,Cell>();
+        Stack<Cell> cellStack = new Stack<Cell>();
+        Cell start = maze.getEntryPoint();
+        Cell end = maze.getExitPoint();
+        Cell currentCell = start;
+        cellStack.push(start);
+        visited.add(start);
+
+        while (!cellStack.empty() && currentCell != end)
+        {
+            currentCell = cellStack.pop();
+            path.add(currentCell);
+            for (Cell neighbor : maze.getEdges(currentCell))
+            {
+                if (!visited.contains(neighbor)) {
+                    cellStack.push(neighbor);
+                    visited.add(neighbor);
+                    predecessors.put(neighbor,currentCell);
+                }
+                if (neighbor == end) break;
+            }
+        }
+        path.add(end);
+        printShortestPath(shortestPath, predecessors, start, end);
+        printDFS(path,"totalPath");
+        printDFS(shortestPath,"shortest");
+    }
+    private void printShortestPath(ArrayList<Cell> shortestPath,HashMap<Cell,Cell> predecessors, Cell start, Cell end){
+        if (start.equals(end)){
+            shortestPath.add(start);
+        }
+        else if (predecessors.get(end) == null){
+            System.out.println("No shortest path");
+        }else {
+            printShortestPath(shortestPath, predecessors, start,predecessors.get(end));
+            shortestPath.add(end);
+        }
+    }
+    private void printDFS(ArrayList<Cell> path, String typeOfPath){
+        int size = grid.length;
+        char[][] charMaze = new char[size*2+1][size*2+1];
+        int index = 0;
+        int offSetX = 1;
+        int offSetY = 1;
+        for(int row = 0; row < size; ++row) {
+            offSetX = 1;
+            for(int col = 0; col < size; ++col) {
+                Cell currentCell = grid[row][col]; //gets cell at (x,y)
+                //North Wall
+                charMaze[row+offSetY-1][col+offSetX] = (currentCell.getNorthWall()) ? '-' : ' ';
+                //South Wall
+                charMaze[row+offSetY+1][col+offSetX] = (currentCell.getSouthWall()) ? '-' : ' ';
+                //East Wall
+                charMaze[row+offSetY][col+offSetX+1] = (currentCell.getEastWall()) ? '|' : ' ';
+                //West Wall
+                charMaze[row+offSetY][col+offSetX-1] = (currentCell.getWestWall()) ? '|' : ' ';
+                offSetX++;
+            }
+            offSetY++;
+        }
+        String result = "";
+
+        offSetY = 0;
+        for(int row = 0; row < charMaze.length; ++row)
+        {
+            offSetX = 0;
+            for(int col = 0; col < charMaze.length; ++col)
+            {
+                if(row % 2 == 0 && col % 2 == 0) {
+                    charMaze[row][col] = '+';
+                }
+                else if(row % 2 != 0 && col % 2 != 0) {
+                    if (typeOfPath.equals("shortest")){
+                        if(path.contains(grid[offSetY][offSetX])){
+                            charMaze[row][col] = '#';
+                        }
+                        else {
+                            charMaze[row][col] = ' ';
+                        }
+                    }
+                    else if(typeOfPath.equals("totalPath")){
+                        if(path.contains(grid[offSetY][offSetX])){
+                            charMaze[row][col] = (char)((path.indexOf(grid[offSetY][offSetX])%10) + 48) ;
+
+                        }
+                        else {
+                            charMaze[row][col] = ' ';
+                        }
+                    }
+                    else {
+                        charMaze[row][col] = ' ';
+                    }
+                    offSetX++;
+                }
+
+                result += charMaze[row][col];
+            }
+            if(row % 2 != 0) { offSetY++;}
+            result += "\n";
+        }
+        System.out.println(result);
     }
 }
